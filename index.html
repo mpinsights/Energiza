@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Energiza — Fueling Young Minds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--deep:#0f1419;--card:#141920;--border:rgba(255,255,255,0.07);--amber:#e8a020;--amber-light:#f5c060;--amber-dim:rgba(232,160,32,0.15);--text:#e8e2d6;--muted:#7a7568;--white:#f5f0e8;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--deep);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.3;}
+
+/* TICKER */
+.ticker-wrap{background:var(--amber);overflow:hidden;height:32px;display:flex;align-items:center;}
+.ticker-label{background:var(--black);color:var(--amber);font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:0 12px;height:100%;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;}
+.ticker-track{display:flex;animation:ticker 28s linear infinite;white-space:nowrap;}
+.ticker-track span{font-family:'DM Mono',monospace;font-size:10px;color:var(--black);font-weight:500;padding:0 24px;letter-spacing:.04em;}
+.ticker-track span::before{content:'◆ ';opacity:.5;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* NAV */
+nav{border-bottom:1px solid var(--border);background:rgba(10,10,10,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:200;}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.logo-icon{width:28px;height:28px;background:var(--amber);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);flex-shrink:0;}
+.logo-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white);letter-spacing:-.02em;}
+.logo-text span{color:var(--amber);}
+.nav-links{display:flex;align-items:center;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:4px;transition:color .2s,background .2s;white-space:nowrap;}
+.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.05);}
+.nav-links a.active{color:var(--amber);}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.btn-nav{background:var(--amber);color:var(--black);border:none;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:background .2s;white-space:nowrap;}
+.btn-nav:hover{background:var(--amber-light);}
+.icon-btn{background:none;border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.icon-btn:hover{color:var(--white);border-color:rgba(255,255,255,.2);}
+.hamburger{display:none;}
+
+/* MOBILE MENU */
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,10,10,.98);z-index:300;flex-direction:column;padding:24px 20px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;}
+.mobile-menu ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.mobile-menu ul a{display:block;color:var(--text);text-decoration:none;font-family:'Playfair Display',serif;font-size:28px;font-weight:700;padding:10px 0;border-bottom:1px solid var(--border);transition:color .2s;}
+.mobile-menu ul a:hover,.mobile-menu ul a:active{color:var(--amber);}
+.mobile-menu-foot{margin-top:auto;padding-top:28px;}
+
+/* DATE BAR */
+.datebar{max-width:1400px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:6px;}
+.datebar-left{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.datebar-right{display:flex;gap:14px;}
+.datebar-right a{font-size:10px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.datebar-right a:hover{color:var(--amber);}
+
+/* MAIN */
+main{max-width:1400px;margin:0 auto;padding:0 16px;}
+
+/* TOPICS */
+.topics-bar{display:flex;gap:8px;padding:18px 0;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.topics-bar::-webkit-scrollbar{display:none;}
+.topic-pill{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.topic-pill:hover,.topic-pill.active{background:var(--amber-dim);border-color:rgba(232,160,32,.4);color:var(--amber);}
+
+/* HERO */
+.hero-grid{display:grid;grid-template-columns:1fr 340px;grid-template-rows:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:22px;border-radius:4px;overflow:hidden;}
+.hero-main{grid-row:1/3;background:var(--card);position:relative;overflow:hidden;min-height:440px;cursor:pointer;}
+.hero-main:hover .hero-bg{transform:scale(1.03);}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a2030 0%,#0d1520 40%,#1a1000 100%);transition:transform .6s ease;}
+.hero-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(232,160,32,.12) 0%,transparent 60%);}
+.hero-svg{position:absolute;right:36px;top:50%;transform:translateY(-50%);opacity:.12;pointer-events:none;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.96) 0%,rgba(10,10,10,.3) 55%,transparent 100%);}
+.hero-content{position:absolute;bottom:0;left:0;right:0;padding:24px 22px;}
+.tag{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border-radius:2px;margin-bottom:10px;}
+.tag-amber{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(232,160,32,.3);}
+.tag-red{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid rgba(192,57,43,.3);}
+.tag-blue{background:rgba(52,152,219,.12);color:#5dade2;border:1px solid rgba(52,152,219,.25);}
+.tag-green{background:rgba(39,174,96,.12);color:#58d68d;border:1px solid rgba(39,174,96,.25);}
+.tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(20px,2.4vw,34px);font-weight:700;line-height:1.2;color:var(--white);margin-bottom:12px;letter-spacing:-.02em;}
+.hero-excerpt{font-size:13px;color:rgba(232,226,214,.7);line-height:1.7;margin-bottom:14px;}
+.hero-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;}
+.hero-meta-author{color:var(--amber);}
+.hero-side{background:var(--card);padding:20px;position:relative;overflow:hidden;cursor:pointer;transition:background .2s;}
+.hero-side:hover{background:#1a2130;}
+.hero-side:first-of-type{border-bottom:1px solid var(--border);}
+.side-num{font-family:'Playfair Display',serif;font-size:54px;font-weight:900;color:rgba(255,255,255,.03);position:absolute;top:-8px;right:12px;line-height:1;user-select:none;}
+.side-title{font-family:'Playfair Display',serif;font-size:15.5px;font-weight:700;line-height:1.35;color:var(--white);margin:8px 0 7px;letter-spacing:-.01em;}
+.side-meta{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.06em;}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:32px 0 16px;border-bottom:1px solid var(--border);margin-bottom:22px;}
+.section-title{display:flex;align-items:center;gap:12px;}
+.section-title h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--white);letter-spacing:-.02em;}
+.section-line{width:34px;height:2px;background:var(--amber);border-radius:1px;}
+.see-all{font-family:'DM Mono',monospace;font-size:10px;color:var(--amber);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:5px;transition:gap .2s;}
+.see-all:hover{gap:9px;}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.card{background:var(--card);padding:22px;cursor:pointer;transition:background .2s;display:flex;flex-direction:column;gap:10px;}
+.card:hover{background:#1a2130;}
+.card-num{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.13);letter-spacing:.1em;}
+.card-title{font-family:'Playfair Display',serif;font-size:15.5px;font-weight:700;line-height:1.4;color:var(--white);letter-spacing:-.01em;flex:1;}
+.card:hover .card-title{color:var(--amber-light);}
+.card-excerpt{font-size:12.5px;color:var(--muted);line-height:1.65;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:auto;}
+.card-author{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.06em;}
+.card-read{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.17);letter-spacing:.08em;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 310px;gap:32px;padding-bottom:60px;}
+
+/* NEWS LIST */
+.article-list{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.article-item{display:grid;grid-template-columns:1fr 68px;gap:14px;padding:18px 20px;border-bottom:1px solid var(--border);background:var(--card);cursor:pointer;transition:background .2s;align-items:start;}
+.article-item:last-child{border-bottom:none;}
+.article-item:hover{background:#1a2130;}
+.art-tag-row{display:flex;gap:8px;margin-bottom:5px;}
+.art-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--white);line-height:1.4;letter-spacing:-.01em;margin-bottom:4px;}
+.article-item:hover .art-title{color:var(--amber-light);}
+.art-excerpt{font-size:12.5px;color:var(--muted);line-height:1.6;}
+.art-meta{font-family:'DM Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.2);margin-top:7px;letter-spacing:.06em;}
+.art-thumb{width:68px;height:68px;background:var(--black);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;opacity:.75;}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:22px;}
+.sb-block{border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--card);}
+.sb-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;}
+.sb-head h3{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.sb-bar{width:3px;height:12px;background:var(--amber);border-radius:2px;}
+.trend-item{padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;display:flex;gap:11px;align-items:start;}
+.trend-item:last-child{border-bottom:none;}
+.trend-item:hover{background:#1a2130;}
+.trend-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:rgba(232,160,32,.2);line-height:1;min-width:20px;flex-shrink:0;}
+.trend-title{font-size:12.5px;color:var(--text);line-height:1.45;}
+.trend-item:hover .trend-title{color:var(--amber-light);}
+.trend-date{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.06em;}
+
+/* NEWSLETTER */
+.nl-block{border:1px solid rgba(232,160,32,.2);border-radius:4px;background:linear-gradient(135deg,rgba(232,160,32,.06) 0%,rgba(20,25,32,.5) 100%);padding:20px;}
+.nl-block h3{font-family:'Playfair Display',serif;font-size:16.5px;font-weight:700;color:var(--white);margin-bottom:7px;letter-spacing:-.01em;}
+.nl-block p{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+.nl-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:3px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;margin-bottom:8px;transition:border-color .2s;}
+.nl-input:focus{border-color:rgba(232,160,32,.4);}
+.nl-input::placeholder{color:var(--muted);}
+.btn-full{width:100%;background:var(--amber);color:var(--black);border:none;padding:10px;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:background .2s;}
+.btn-full:hover{background:var(--amber-light);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);margin-top:40px;background:var(--black);}
+.footer-inner{max-width:1400px;margin:0 auto;padding:40px 16px;display:grid;grid-template-columns:200px 1fr 1fr 1fr;gap:30px;}
+.footer-brand p{font-size:12.5px;color:var(--muted);line-height:1.7;margin-top:12px;}
+.footer-col h4{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:13px;}
+.footer-col a{display:block;color:rgba(232,226,214,.45);text-decoration:none;font-size:13px;padding:3px 0;transition:color .2s;}
+.footer-col a:hover{color:var(--amber);}
+.footer-bottom{max-width:1400px;margin:0 auto;padding:14px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-bottom p{font-family:'DM Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.13);letter-spacing:.06em;}
+
+/* FAB */
+.fab{position:fixed;bottom:22px;right:18px;background:var(--amber);color:var(--black);border:none;width:50px;height:50px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 6px 26px rgba(232,160,32,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;z-index:500;}
+.fab:hover{transform:scale(1.1);box-shadow:0 10px 34px rgba(232,160,32,.55);}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:9998;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;padding:16px;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--deep);border:1px solid var(--border);border-radius:8px;width:100%;max-width:660px;max-height:88vh;overflow-y:auto;transform:translateY(20px);transition:transform .25s;padding:28px 24px;position:relative;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-close:hover{color:var(--white);border-color:rgba(255,255,255,.3);}
+.modal-tag{margin-bottom:14px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:clamp(19px,4vw,28px);font-weight:700;line-height:1.25;color:var(--white);margin-bottom:11px;letter-spacing:-.02em;}
+.modal-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.modal-body{font-size:14.5px;color:rgba(232,226,214,.82);line-height:1.85;}
+.modal-body p{margin-bottom:14px;}
+.modal-body strong{color:var(--white);font-weight:500;}
+
+/* ADMIN MODAL */
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.form-control{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.form-control:focus{border-color:rgba(232,160,32,.4);}
+textarea.form-control{min-height:100px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.select-control{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;cursor:pointer;appearance:none;}
+.select-control option{background:var(--deep);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;}
+.btn-cancel{background:transparent;border:1px solid var(--border);color:var(--muted);padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;}
+.btn-cancel:hover{color:var(--text);}
+.btn-publish{background:var(--amber);color:var(--black);border:none;padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:background .2s;}
+.btn-publish:hover{background:var(--amber-light);}
+
+/* PASSWORD MODAL */
+.pw-modal{max-width:380px;text-align:center;}
+.pw-icon{font-size:38px;margin-bottom:14px;}
+.pw-hint{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px;}
+.pw-error{color:#e74c3c;font-size:12px;margin-top:7px;display:none;}
+.pw-error.show{display:block;}
+
+/* TOAST */
+.toast{position:fixed;bottom:84px;right:18px;background:rgba(39,174,96,.15);border:1px solid rgba(39,174,96,.4);color:#58d68d;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;padding:11px 18px;border-radius:4px;z-index:9999;transform:translateY(16px);opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ANIMS */
+.fade-up{opacity:0;transform:translateY(16px);animation:fadeUp .5s ease forwards;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+.fade-up:nth-child(1){animation-delay:.05s;}
+.fade-up:nth-child(2){animation-delay:.1s;}
+.fade-up:nth-child(3){animation-delay:.15s;}
+
+/* ══ TABLET ══ */
+@media(max-width:1024px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .hero-grid{grid-template-columns:1fr;}
+  .hero-main{grid-row:auto;min-height:360px;}
+  .cards-grid{grid-template-columns:repeat(2,1fr);}
+  .two-col{grid-template-columns:1fr;}
+  .sidebar{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .nl-block{grid-column:1/-1;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .footer-brand{grid-column:1/-1;}
+}
+
+/* ══ MOBILE ══ */
+@media(max-width:640px){
+  .ticker-label{font-size:8px;padding:0 8px;}
+  .ticker-track span{font-size:9px;padding:0 16px;}
+  .nav-inner{padding:0 12px;height:50px;}
+  .logo-text{font-size:17px;}
+  .btn-nav{display:none;}
+  .datebar{padding:8px 12px;}
+  .datebar-right{display:none;}
+  main{padding:0 12px;}
+  .topics-bar{padding:14px 0;}
+  .hero-grid{margin-top:16px;}
+  .hero-main{min-height:300px;}
+  .hero-svg{display:none;}
+  .hero-content{padding:18px 14px;}
+  .hero-excerpt{display:none;}
+  .hero-title{font-size:19px;}
+  .hero-side{padding:16px 14px;}
+  .side-title{font-size:14px;}
+  .cards-grid{grid-template-columns:1fr;}
+  .card{padding:18px 16px;}
+  .section-header{padding:26px 0 13px;}
+  .section-title h2{font-size:18px;}
+  .article-item{padding:15px 14px;grid-template-columns:1fr 56px;gap:12px;}
+  .art-thumb{width:56px;height:56px;font-size:20px;}
+  .art-title{font-size:14.5px;}
+  .two-col{grid-template-columns:1fr;}
+  .sidebar{display:flex;flex-direction:column;}
+  .footer-inner{grid-template-columns:1fr;gap:20px;padding:28px 12px;}
+  .footer-col{display:none;}
+  .footer-bottom{padding:12px;}
+  .modal-overlay{align-items:flex-end;padding:0;}
+  .modal{border-radius:12px 12px 0 0;max-height:90vh;padding:24px 18px;}
+  .modal-title{font-size:18px;}
+  .modal-body{font-size:14px;}
+  .form-row{grid-template-columns:1fr;}
+  .fab{bottom:18px;right:14px;width:46px;height:46px;font-size:22px;}
+  .pw-modal{border-radius:12px;}
+}
+</style>
+</head>
+<body>
+    <!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">↯ AO VIVO</div>
+  <div style="overflow:hidden;flex:1;">
+    <div class="ticker-track">
+      <span>Angola: produção petrolífera cresce 12% no Q1 2025</span>
+      <span>OPEP+ mantém quotas para o próximo semestre</span>
+      <span>Sonangol anuncia novos contratos em águas profundas</span>
+      <span>Renováveis representam 8% da matriz energética angolana</span>
+      <span>Brent ultrapassa 89 USD por barril</span>
+      <span>Angola: produção petrolífera cresce 12% no Q1 2025</span>
+      <span>OPEP+ mantém quotas para o próximo semestre</span>
+      <span>Sonangol anuncia novos contratos em águas profundas</span>
+      <span>Renováveis representam 8% da matriz energética angolana</span>
+      <span>Brent ultrapassa 89 USD por barril</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">Energiza<span>.</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Início</a></li>
+      <li><a href="#">Petróleo</a></li>
+      <li><a href="#">Gás Natural</a></li>
+      <li><a href="#">Renováveis</a></li>
+      <li><a href="#">Análises</a></li>
+      <li><a href="#">Projetos</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="toggleSearch()" aria-label="Pesquisar">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="btn-nav">Newsletter</button>
+      <button class="icon-btn hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-top">
+    <a href="#" class="logo" onclick="toggleMenu()">
+      <div class="logo-icon"></div>
+      <span class="logo-text">Energiza<span>.</span></span>
+    </a>
+    <button class="icon-btn" onclick="toggleMenu()">✕</button>
+  </div>
+  <ul>
+    <li><a href="#" onclick="toggleMenu()">Início</a></li>
+    <li><a href="#" onclick="toggleMenu()">Petróleo</a></li>
+    <li><a href="#" onclick="toggleMenu()">Gás Natural</a></li>
+    <li><a href="#" onclick="toggleMenu()">Renováveis</a></li>
+    <li><a href="#" onclick="toggleMenu()">Análises</a></li>
+    <li><a href="#" onclick="toggleMenu()">Projetos</a></li>
+    <li><a href="#" onclick="toggleMenu()">Sobre</a></li>
+  </ul>
+  <div class="mobile-menu-foot">
+    <button class="btn-full" onclick="toggleMenu()">📧 Newsletter</button>
+  </div>
+</div>
+
+<!-- DATE BAR -->
+<div class="datebar">
+  <span class="datebar-left" id="dateLabel">—</span>
+  <div class="datebar-right">
+    <a href="#">Angola</a><a href="#">África</a><a href="#">Mundial</a><a href="#">Mercados</a>
+  </div>
+</div>
+
+<main>
+  <div class="topics-bar">
+    <button class="topic-pill active">Todos</button>
+    <button class="topic-pill">Exploração</button>
+    <button class="topic-pill">Refino</button>
+    <button class="topic-pill">OPEP+</button>
+    <button class="topic-pill">LNG</button>
+    <button class="topic-pill">Renováveis</button>
+    <button class="topic-pill">Geopolítica</button>
+    <button class="topic-pill">Mercados</button>
+    <button class="topic-pill">Tecnologia</button>
+    <button class="topic-pill">Angola</button>
+    <button class="topic-pill">Educação</button>
+  </div>
+    <!-- HERO -->
+  <div class="hero-grid">
+    <div class="hero-main fade-up" onclick="openArticle(0)">
+      <div class="hero-bg">
+        <svg class="hero-svg" width="280" height="280" viewBox="0 0 280 280" fill="none">
+          <circle cx="140" cy="140" r="110" stroke="#e8a020" stroke-width="1" stroke-dasharray="5 4"/>
+          <circle cx="140" cy="140" r="74" stroke="#e8a020" stroke-width=".5" opacity=".5"/>
+          <polygon points="140,46 163,112 234,112 177,154 197,222 140,180 83,222 103,154 46,112 117,112" fill="#e8a020" opacity=".1"/>
+          <circle cx="140" cy="140" r="9" fill="#e8a020" opacity=".7"/>
+          <path d="M127 244 L140 138 L153 244Z" stroke="#e8a020" stroke-width="1.5" fill="none" opacity=".5"/>
+          <line x1="118" y1="244" x2="162" y2="244" stroke="#e8a020" stroke-width="1.5" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="tag tag-amber"><span class="tag-dot"></span>Destaque</div>
+        <h1 class="hero-title">Angola no Centro da Nova Geopolítica Energética: O que muda com a transição global</h1>
+        <p class="hero-excerpt">Com o mundo a reconfigurar as suas dependências energéticas, Angola posiciona-se como ator estratégico entre os hidrocarbonetos e a descarbonização.</p>
+        <div class="hero-meta">
+          <span class="hero-meta-author">Equipe Energiza</span>
+          <span>—</span>
+          <span>18 Abr 2025 · 8 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-side fade-up" onclick="openArticle(1)">
+      <div class="side-num">01</div>
+      <div class="tag tag-blue">Análise</div>
+      <div class="side-title">Como Funciona o Ciclo de Exploração Petrolífera: Da Sísmica à Produção</div>
+      <div class="side-meta">15 Abr 2025 · 6 min</div>
+    </div>
+    <div class="hero-side fade-up" onclick="openArticle(2)">
+      <div class="side-num">02</div>
+      <div class="tag tag-green">Renováveis</div>
+      <div class="side-title">Solar e Eólico em África: O Continente que Pode Liderar a Próxima Revolução Energética</div>
+      <div class="side-meta">12 Abr 2025 · 5 min</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title"><div class="section-line"></div><h2>Artigos Técnicos</h2></div>
+    <a href="#" class="see-all">Ver todos →</a>
+  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
+
+  <div class="section-header" style="margin-top:40px;">
+    <div class="section-title"><div class="section-line"></div><h2>Últimas Notícias</h2></div>
+    <a href="#" class="see-all">Ver todas →</a>
+  </div>
+  <div class="two-col">
+    <div class="article-list" id="newsList"></div>
+    <div class="sidebar">
+      <div class="sb-block">
+        <div class="sb-head"><div class="sb-bar"></div><h3>Em Alta</h3></div>
+        <div id="trendingList"></div>
+      </div>
+      <div class="nl-block">
+        <div style="font-size:24px;margin-bottom:11px;">⚡</div>
+        <h3>Briefing Energético</h3>
+        <p>Resumo semanal com análises e notícias do sector energético angolano e mundial.</p>
+        <input type="email" class="nl-input" placeholder="o.seu@email.com">
+        <button class="btn-full">Subscrever Grátis</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo"><div class="logo-icon" style="width:24px;height:24px;"></div><span class="logo-text" style="font-size:17px;">Energiza<span>.</span></span></a>
+      <p>Informação técnica e jornalismo especializado sobre o sector energético angolano e global.</p>
+    </div>
+    <div class="footer-col"><h4>Secções</h4><a href="#">Petróleo & Gás</a><a href="#">Renováveis</a><a href="#">Análises</a><a href="#">Geopolítica</a></div>
+    <div class="footer-col"><h4>Empresa</h4><a href="#">Sobre a Energiza</a><a href="#">Equipe Editorial</a><a href="#">Contacto</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Privacidade</a><a href="#">Termos</a></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 ENERGIZA — TODOS OS DIREITOS RESERVADOS</p>
+    <p>LUANDA, ANGOLA</p>
+  </div>
+</footer>
+
+<!-- FAB: Publicar -->
+<button class="fab" onclick="openAdminGate()" title="Publicar artigo">✍️</button>
+
+<!-- READ MODAL -->
+<div class="modal-overlay" id="readModal" onclick="closeModal('readModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal('readModal')">✕</button>
+    <div class="modal-tag" id="modal-tag"></div>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-overlay" id="pwModal" onclick="closeModal('pwModal')">
+  <div class="modal pw-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal('pwModal')">✕</button>
+    <div class="pw-icon">🔐</div>
+    <h2 class="modal-title" style="font-size:20px;text-align:center;">Área do Editor</h2>
+    <p class="pw-hint">Introduz o código de acesso para publicar conteúdo na Energiza.</p>
+    <div style="margin-top:16px;">
+      <input type="password" class="form-control" id="pwInput" placeholder="Código de acesso..." onkeydown="if(event.key==='Enter')checkPw()">
+      <p class="pw-error" id="pwError">❌ Código incorreto. Tenta novamente.</p>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn-publish" style="width:100%;padding:12px;" onclick="checkPw()">Entrar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW POST MODAL -->
+<div class="modal-overlay" id="newPostModal" onclick="closeModal('newPostModal')">
+  <div class="modal" style="max-width:580px;" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal('newPostModal')">✕</button>
+    <div style="margin-bottom:18px;">
+      <div class="tag tag-amber" style="margin-bottom:10px;">✍️ Editor</div>
+      <h2 class="modal-title" style="font-size:21px;">Publicar Novo Artigo</h2>
+    </div>
+    <div class="form-group">
+      <label>Título do artigo *</label>
+      <input type="text" class="form-control" id="newTitle" placeholder="Ex: Como funciona o refino de petróleo...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Categoria *</label>
+        <select class="select-control" id="newCategory">
+          <option>Petróleo</option><option>Gás Natural</option><option>Renováveis</option>
+          <option>Análise</option><option>Notícia</option><option>Geopolítica</option><option>Tecnologia</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Autor</label>
+        <input type="text" class="form-control" id="newAuthor" placeholder="Nome" value="Equipe Energiza">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Resumo (aparece na listagem) *</label>
+      <textarea class="form-control" id="newExcerpt" placeholder="Breve descrição do artigo..." style="min-height:68px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Conteúdo completo *</label>
+      <textarea class="form-control" id="newBody" placeholder="Escreve o conteúdo aqui. Separa os parágrafos com uma linha em branco." style="min-height:150px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('newPostModal')">Cancelar</button>
+      <button class="btn-publish" onclick="publishArticle()">⚡ Publicar Agora</button>
+    </div>
+  </div>
+</div>
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Artigo publicado com sucesso!</div>
+
+<script>
+const articles=[
+  {id:0,title:"Angola no Centro da Nova Geopolítica Energética: O que muda com a transição global",excerpt:"Com o mundo a reconfigurar as suas dependências energéticas, Angola posiciona-se como ator estratégico.",category:"Geopolítica",cat:"tag-amber",author:"Equipe Energiza",date:"18 Abr 2025",read:"8 min",body:`<p>Angola ocupa uma posição ímpar no tabuleiro energético global. Com reservas provadas de mais de 8 mil milhões de barris e produção que supera 1,1 milhão de barris/dia, o país é o segundo maior produtor de petróleo de África subsaariana.</p><p>A recente adesão de Angola à OPEP+ como membro pleno e as negociações em torno das quotas de produção revelam uma diplomacia energética cada vez mais sofisticada. Ao mesmo tempo, o governo aposta na expansão do parque solar e na eletrificação rural como pilares do desenvolvimento.</p><p><strong>Para o sector petrolífero, os próximos anos serão decisivos:</strong> os blocos do pré-sal do Atlântico Sul guardam um potencial ainda por quantificar, enquanto os campos maduros do norte exigem investimento em recuperação melhorada de petróleo (EOR).</p>`},
+  {id:1,title:"Como Funciona o Ciclo de Exploração Petrolífera: Da Sísmica à Produção",excerpt:"Um guia técnico sobre as fases da exploração petrolífera — da aquisição de dados sísmicos à declaração de comercialidade.",category:"Análise",cat:"tag-blue",author:"Equipe Energiza",date:"15 Abr 2025",read:"6 min",body:`<p>A exploração petrolífera é um processo longo, técnico e de alto risco. Compreender as suas fases é essencial.</p><p><strong>1. Levantamento Sísmico</strong> — Ondas sonoras criam uma imagem das formações geológicas em profundidade.</p><p><strong>2. Interpretação Geológica</strong> — Geólogos identificam armadilhas estruturais onde o petróleo pode estar retido.</p><p><strong>3. Perfuração Exploratória (Wildcat)</strong> — Probabilidade de sucesso entre 15% e 30% em águas profundas.</p><p><strong>4. Declaração de Comercialidade</strong> — Testes de fluxo determinam a extensão e qualidade do campo.</p>`},
+  {id:2,title:"Solar e Eólico em África: O Continente que Pode Liderar a Próxima Revolução Energética",excerpt:"África tem 60% dos melhores recursos solares do planeta, mas apenas 1% da capacidade instalada global.",category:"Renováveis",cat:"tag-green",author:"Equipe Energiza",date:"12 Abr 2025",read:"5 min",body:`<p>África recebe mais irradiação solar por metro quadrado do que qualquer outra região, mas a capacidade instalada é ainda mínima no contexto mundial.</p><p>O paradoxo tem explicação multidimensional: <strong>financiamento, estabilidade regulatória, infraestrutura de rede e capacidade técnica local</strong> são os quatro pilares que faltam construir.</p><p>Angola tem taxa de eletrificação rural abaixo de 40%, com enorme espaço para sistemas solares descentralizados. O Governo já identificou esta prioridade no seu Plano de Energias Renováveis.</p>`},
+  {id:3,title:"O que é o Gás Natural Liquefeito (GNL) e Por que Está a Transformar o Mercado Global",excerpt:"O GNL tornou-se o commodity energético do século XXI. Perceba como funciona e qual o papel de Angola.",category:"Gás Natural",cat:"tag-blue",author:"Equipe Energiza",date:"10 Abr 2025",read:"7 min",body:`<p>O GNL é gás natural arrefecido a -162°C, reduzindo o volume em 600 vezes — o que permite transportá-lo em navios metaneiros para qualquer ponto do globo.</p><p>Angola tem a unidade de GNL de Soyo (Angola LNG), com 5,2 mtpa de capacidade, colocando o país no mapa dos exportadores globais.</p><p><strong>Importância:</strong> o GNL é combustível de transição — mais limpo que o carvão, mais flexível logisticamente que o petróleo.</p>`},
+  {id:4,title:"Hidrogénio Verde: Hype ou Futuro Real para África?",excerpt:"O hidrogénio verde domina as conversas sobre descarbonização. Quais são as condições para África ser competitiva?",category:"Renováveis",cat:"tag-green",author:"Equipe Energiza",date:"8 Abr 2025",read:"6 min",body:`<p>O hidrogénio verde é produzido por eletrólise da água com energia renovável — sem emissões de CO₂. É visto como chave para sectores difíceis de descarbonizar: siderurgia, aviação, transporte pesado.</p><p>África tem <strong>sol e terra</strong> em abundância. Namíbia, Egito e Marrocos já desenvolvem projetos para exportar para a Europa.</p><p><strong>Aviso honesto:</strong> os custos ainda são altos. É um investimento de longo prazo com incerteza considerável para Angola no horizonte 2035-2040.</p>`},
+  {id:5,title:"Perfuração em Águas Ultra-Profundas: Tecnologia e Desafios no Atlântico Sul",excerpt:"Perfurar a mais de 3.000 metros de lâmina d'água é uma das operações mais complexas da engenharia moderna.",category:"Petróleo",cat:"tag-amber",author:"Equipe Energiza",date:"5 Abr 2025",read:"9 min",body:`<p>Sondas UDW (acima de 1.500m) são das máquinas mais complexas já construídas — uma de 6ª geração pode custar mais de 700 milhões de dólares.</p><p>O processo usa posicionamento dinâmico por GPS (sem ancoragem), com coluna de perfuração descendo pelo riser até ao BOP no fundo do mar.</p><p><strong>Os blocos angolanos do pré-sal</strong> representam a fronteira tecnológica no Atlântico Sul. Sonangol e parceiras (TotalEnergies, bp, ExxonMobil) investem em sísmica 4D para melhorar a taxa de sucesso.</p>`}
+];
+const news=[
+  {title:"Sonangol e TotalEnergies reforçam parceria para o Bloco 17",tag:"tag-amber",tagName:"Petróleo",date:"Hoje, 14h32",excerpt:"Acordo de extensão da licença e compromisso de investimento de 2,1 mil milhões USD nos próximos 5 anos.",emoji:"🛢️"},
+  {title:"OPEP+ decide manter cortes de produção até ao final de 2025",tag:"tag-red",tagName:"OPEP+",date:"Hoje, 11h15",excerpt:"Na reunião de Viena, os membros votaram por unanimidade manter as quotas face à instabilidade dos preços.",emoji:"📊"},
+  {title:"Angola recebe delegação europeia para negociações de GNL",tag:"tag-blue",tagName:"GNL",date:"Ontem, 16h45",excerpt:"Ministério dos Recursos Minerais recebeu representantes de cinco países europeus para contratos de longo prazo.",emoji:"🌍"},
+  {title:"Novo campo solar de 50MW inaugurado na província do Namibe",tag:"tag-green",tagName:"Solar",date:"Ontem, 09h20",excerpt:"Primeira central solar de grande escala no sul de Angola, beneficiando 120 mil habitantes da região.",emoji:"☀️"},
+  {title:"Brent regista maior subida semanal desde Janeiro",tag:"tag-amber",tagName:"Mercados",date:"17 Abr, 18h00",excerpt:"Tensões no Médio Oriente e redução dos stocks nos EUA empurraram o Brent para 89,40 USD/barril.",emoji:"📈"}
+];
+const trending=["O que é o cracking catalítico e como se aplica no refino angolano","Diferença entre reservas provadas, prováveis e possíveis","Como a Sonangol se compara às maiores NOCs do mundo","Energia eólica offshore: potencial para a costa angolana","O papel do gás associado na produção petrolífera"];
+
+function init(){
+  document.getElementById('dateLabel').textContent=new Date().toLocaleDateString('pt-AO',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
+  const grid=document.getElementById('cardsGrid');
+  [3,4,5].forEach((idx,i)=>{
+    const a=articles[idx];
+    grid.innerHTML+=`<div class="card fade-up" onclick="openArticle(${idx})"><div class="card-num">${String(i+1).padStart(2,'0')}</div><div class="tag ${a.cat}" style="display:inline-flex;">${a.category}</div><div class="card-title">${a.title}</div><div class="card-excerpt">${a.excerpt}</div><div class="card-footer"><span class="card-author">${a.author}</span><span class="card-read">${a.read}</span></div></div>`;
+  });
+  const nl=document.getElementById('newsList');
+  news.forEach(n=>{
+    nl.innerHTML+=`<div class="article-item" onclick="openNewsModal(this)"><div><div class="art-tag-row"><div class="tag ${n.tag}">${n.tagName}</div></div><div class="art-title">${n.title}</div><div class="art-excerpt">${n.excerpt}</div><div class="art-meta">${n.date}</div></div><div class="art-thumb">${n.emoji}</div></div>`;
+  });
+  const tl=document.getElementById('trendingList');
+  trending.forEach((t,i)=>{
+    tl.innerHTML+=`<div class="trend-item"><div class="trend-n">${i+1}</div><div><div class="trend-title">${t}</div><div class="trend-date">${12-i*2} Abr 2025</div></div></div>`;
+  });
+  document.querySelectorAll('.topics-bar .topic-pill').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.topics-bar .topic-pill').forEach(b=>b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+}
+
+function openArticle(idx){
+  const a=articles[idx];
+  document.getElementById('modal-tag').innerHTML=`<div class="tag ${a.cat}">${a.category}</div>`;
+  document.getElementById('modal-title').textContent=a.title;
+  document.getElementById('modal-meta').innerHTML=`Por <span style="color:var(--amber)">${a.author}</span> &nbsp;·&nbsp; ${a.date} &nbsp;·&nbsp; ${a.read} de leitura`;
+  document.getElementById('modal-body').innerHTML=a.body;
+  document.getElementById('readModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function openNewsModal(el){
+  document.getElementById('modal-tag').innerHTML=`<div class="tag tag-amber">Notícia</div>`;
+  document.getElementById('modal-title').textContent=el.querySelector('.art-title').textContent;
+  document.getElementById('modal-meta').innerHTML=`Equipe Energiza &nbsp;·&nbsp; ${el.querySelector('.art-meta').textContent.trim()}`;
+  document.getElementById('modal-body').innerHTML=`<p>${el.querySelector('.art-excerpt').textContent}</p>`;
+  document.getElementById('readModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(!document.querySelector('.modal-overlay.open')) document.body.style.overflow='';
+}
+function openAdminGate(){
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwError').classList.remove('show');
+  document.getElementById('pwModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('pwInput').focus(),300);
+}
+function checkPw(){
+  if(document.getElementById('pwInput').value.trim().toLowerCase()==='fuelingyoungminds'){
+    closeModal('pwModal');
+    setTimeout(()=>{document.getElementById('newPostModal').classList.add('open');document.body.style.overflow='hidden';},200);
+  } else {
+    document.getElementById('pwError').classList.add('show');
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').style.borderColor='rgba(192,57,43,.7)';
+    setTimeout(()=>document.getElementById('pwInput').style.borderColor='',1500);
+  }
+}
+function publishArticle(){
+  const title=document.getElementById('newTitle').value.trim();
+  const excerpt=document.getElementById('newExcerpt').value.trim();
+  const body=document.getElementById('newBody').value.trim();
+  const author=document.getElementById('newAuthor').value.trim()||'Equipe Energiza';
+  const cat=document.getElementById('newCategory').value;
+  if(!title||!excerpt||!body){alert('Preenche o título, resumo e conteúdo.');return;}
+  const catMap={'Petróleo':'tag-amber','Gás Natural':'tag-blue','Renováveis':'tag-green','Análise':'tag-blue','Notícia':'tag-amber','Geopolítica':'tag-red','Tecnologia':'tag-blue'};
+  const today=new Date().toLocaleDateString('pt-AO',{day:'2-digit',month:'short',year:'numeric'});
+  const newArt={id:articles.length,title,excerpt,category:cat,cat:catMap[cat]||'tag-amber',author,date:today,read:'3 min',body:body.split('\n\n').filter(Boolean).map(p=>`<p>${p}</p>`).join('')||`<p>${body}</p>`};
+  articles.push(newArt);
+  const nl=document.getElementById('newsList');
+  const div=document.createElement('div');
+  div.className='article-item';div.style.cssText='border-left:3px solid var(--amber);';
+  div.innerHTML=`<div><div class="art-tag-row"><div class="tag ${newArt.cat}">NOVO · ${cat}</div></div><div class="art-title">${title}</div><div class="art-excerpt">${excerpt}</div><div class="art-meta">Agora mesmo</div></div><div class="art-thumb">📝</div>`;
+  div.onclick=()=>openArticle(newArt.id);
+  nl.prepend(div);
+  ['newTitle','newExcerpt','newBody'].forEach(id=>document.getElementById(id).value='');
+  closeModal('newPostModal');
+  const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);
+  setTimeout(()=>nl.scrollIntoView({behavior:'smooth',block:'start'}),400);
+}
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+function toggleSearch(){const q=prompt('Pesquisar na Energiza:');if(q)alert(`Pesquisa por "${q}" — em desenvolvimento.`);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    ['readModal','pwModal','newPostModal'].forEach(closeModal);
+    const m=document.getElementById('mobileMenu');
+    if(m.classList.contains('open')){m.classList.remove('open');document.body.style.overflow='';}
+  }
+});
+init();
+</script>
+</body>
+</html>
