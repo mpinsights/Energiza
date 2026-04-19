@@ -1,0 +1,16 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "test"
+    label: "Test"
+    files:
+      - label: "Test Page"
+        name: "test"
+        file: "test.md"
+        fields:
+          - { label: "Texto", name: "body", widget: "markdown" }
